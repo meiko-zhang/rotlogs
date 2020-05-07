@@ -1,3 +1,20 @@
+## 修改，支持windows环境开发
+- 使用go mod 管理项目
+- 修改daterot.go ,sizerot.go 中signal常量，支持windows系统
+```go
+//signal.Notify(sig, syscall.SIGUSR1, syscall.SIGUSR2)
+signal.Notify(sig, syscall.SIGINT,syscall.SIGTERM)
+```
+```go
+//if sig == syscall.SIGUSR1 
+if sig == syscall.SIGINT
+```
+
+```go
+// if sig == syscall.SIGUSR2 
+if sig == syscall.SIGTERM 
+```
+
 ## rotlogs is a golang log package
 
 rotlogs是基于其他开源日志包封装而成的，可进行日志轮转的golang日志处理包。按场景，实现了两种日志轮转方式：

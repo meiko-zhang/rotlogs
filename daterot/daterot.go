@@ -57,7 +57,8 @@ func Rotate() (*logrus.Logger, error) {
 	// dynamic modify log level by signal
 	if EnableDynamic {
 		sig := make(chan os.Signal, 1)
-		signal.Notify(sig, syscall.SIGUSR1, syscall.SIGUSR2)
+		//signal.Notify(sig, syscall.SIGUSR1, syscall.SIGUSR2)
+		signal.Notify(sig, syscall.SIGINT,syscall.SIGTERM)
 		go sigModLoglevel(sig, logger)
 	}
 
@@ -79,14 +80,16 @@ func sigModLoglevel(sigCh chan os.Signal, logger *logrus.Logger) {
 }
 
 func modBySig(sig os.Signal, logger *logrus.Logger) {
-	if sig == syscall.SIGUSR1 {
+	    //if sig == syscall.SIGUSR1 {
+	if sig == syscall.SIGINT {
 		level := logger.Level
 		if level != PanicLevel {
 			logger.SetLevel(level - 1)
 		}
 		logrus.Println(time.Now().Format(fmtStr), "Raise log level to:", logger.Level)
 
-	} else if sig == syscall.SIGUSR2 {
+	//} else if sig == syscall.SIGUSR2 {
+	} else if sig == syscall.SIGTERM {
 		level := logger.Level
 		if level != DebugLevel {
 			logger.SetLevel(level + 1)
